@@ -1,5 +1,5 @@
 import React from "react";
-import handleItems from "../helpers/HandleItems";
+import handleItems from "../helpers/HandleItem";
 
 class DeleteItem extends React.Component {
   constructor(props) {
