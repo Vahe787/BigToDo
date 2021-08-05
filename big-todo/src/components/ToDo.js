@@ -58,25 +58,39 @@ class ToDo extends React.Component {
   render() {
     const { inpVal, items, newVal, isInp } = this.state;
     return (
-      <div className="bg-black">
-        <div>
-          <input value={inpVal} onChange={this.handleVal}></input>
-          <button onClick={() => this.handleItem(inpVal)}>ADD</button>
+      <div>
+        <div className="flex justify-center items-center my-5">
+          <input
+            placeholder="ToDo..."
+            className="text-3xl shadow-xl text-gray-500 text-center p-4 border outline-none"
+            value={inpVal}
+            onChange={this.handleVal}
+          ></input>
+          <button
+            className="text-3xl p-4 ml-2 shadow-xl text-gray-500 border transition hover:bg-blue-400"
+            onClick={() => this.handleItem(inpVal)}
+          >
+            ADD
+          </button>
         </div>
         <div>
           {items.map((el) => {
             return (
               <ol key={el.id}>
-                <li>
+                <li className="flex justify-center items-center my-5">
                   {isInp ? (
                     <input
+                      className="w-44 shadow-xl  mr-2 border outline-none text-2xl text-center"
                       onChange={this.handleNewValue}
                       defaultValue={el.text}
                     ></input>
                   ) : (
-                    <p>{el.text}</p>
+                    <p className="w-44 mr-2 text-gray-500 text-2xl">
+                      {el.text}
+                    </p>
                   )}
                   <button
+                    className="text-2xl shadow-xl text-gray-500 p-3 border transition hover:bg-blue-400"
                     onClick={
                       isInp
                         ? () => this.changeItem(newVal, el.id)
