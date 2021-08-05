@@ -9,6 +9,7 @@ class ToDo extends React.Component {
       inpVal: "",
       newVal: "",
       items: [],
+      isInp: false,
     };
   }
 
@@ -38,36 +39,24 @@ class ToDo extends React.Component {
     });
   };
 
-  changeItem = (id) => {
-    this.setState((prevstate) => {
-      return {
-        items: prevstate.items.map((el) => {
-          const { isInp } = el;
-          if (el.id === id) {
-            el.isInp = true;
-          }
-          return el;
-        }),
-      };
+  changeItem = (text, id) => {
+    const itemsCopy = JSON.parse(JSON.stringify(this.state.items));
+    const changeItems = itemsCopy.find((el) => el.id === id);
+    changeItems.text = text;
+    this.setState(() => {
+      return { items: itemsCopy, isInp: false };
     });
   };
 
-  saveChange = (text, id) => {
-    this.setState((prevstate) => {
-      return {
-        items: prevstate.items.map((el) => {
-          if (el.id === id) {
-            el.text = text;
-            el.isInp = false;
-          }
-          return el;
-        }),
-      };
+  onEditClick = (id) => {
+    const changeItems = this.state.items.find((el) => el.id === id);
+    this.setState(() => {
+      return { isInp: !this.state.isInp, newVal: changeItems.text };
     });
   };
 
   render() {
-    const { inpVal, items, newVal } = this.state;
+    const { inpVal, items, newVal, isInp } = this.state;
     return (
       <div className="bg-black">
         <div>
@@ -77,9 +66,9 @@ class ToDo extends React.Component {
         <div>
           {items.map((el) => {
             return (
-              <ol>
-                <li key={el.id}>
-                  {el.isInp ? (
+              <ol key={el.id}>
+                <li>
+                  {isInp ? (
                     <input
                       onChange={this.handleNewValue}
                       defaultValue={el.text}
@@ -89,9 +78,9 @@ class ToDo extends React.Component {
                   )}
                   <button
                     onClick={
-                      el.isInp
-                        ? () => this.saveChange(newVal, el.id)
-                        : () => this.changeItem(el.id)
+                      isInp
+                        ? () => this.changeItem(newVal, el.id)
+                        : () => this.onEditClick(el.id)
                     }
                   >
                     Change
