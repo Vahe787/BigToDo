@@ -1,14 +1,19 @@
 import React from "react";
 import DeleteItem from "./DeleteItem";
 import { v4 as uuidv4 } from "uuid";
+import { saveData } from "../helpers/localStorage";
+import { getData } from "../helpers/localStorage";
 
 class ToDo extends React.Component {
   constructor(props) {
     super(props);
+
+    let getJsonData = getData("data");
+
     this.state = {
       inpVal: "",
       newVal: "",
-      items: [],
+      items: getJsonData ? getJsonData.items : [],
       isInp: false,
     };
   }
@@ -55,6 +60,14 @@ class ToDo extends React.Component {
     });
   };
 
+  setItemlocalStorage = () => {
+    let jsonData = {
+      items: this.state.items,
+    };
+    JSON.stringify(jsonData);
+    saveData("data", jsonData);
+  };
+
   render() {
     const { inpVal, items, newVal, isInp } = this.state;
     return (
@@ -70,7 +83,13 @@ class ToDo extends React.Component {
             className="text-3xl p-4 ml-2 shadow-xl text-gray-500 border transition hover:bg-blue-400"
             onClick={() => this.handleItem(inpVal)}
           >
-            ADD
+            Add
+          </button>
+          <button
+            onClick={this.setItemlocalStorage}
+            className="text-3xl p-4 ml-2 shadow-xl text-gray-500 border transition hover:bg-blue-400"
+          >
+            Save
           </button>
         </div>
         <div>
